@@ -13,16 +13,19 @@ bool checkingTheBrackets(string input)
 
         else if(input[i]==')' || input[i]==']' || input[i]=='}')
         {
-            char ch=stk.top();
             if(stk.empty())
                 return false;
+            char ch=stk.top();
             stk.pop();
 
             if(!((input[i]==')' && ch=='(') || (input[i]==']' && ch=='[') || (input[i]=='}' && ch=='{')))
                 return false;
         }
     }
+    if(stk.empty())
     return true;
+    
+    return false;
 }
 int main()
 {
