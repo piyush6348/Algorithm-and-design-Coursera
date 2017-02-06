@@ -150,6 +150,10 @@ public:
             }
         }
     }
+    bool structurallyIdentically(Tree obj)
+    {
+
+    }
     Tree()
     {
         root=NULL;
