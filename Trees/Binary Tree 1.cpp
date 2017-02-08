@@ -12,8 +12,9 @@ struct node
 };
 class Tree
 {
-    node* root;
+    //node* root;
 public:
+    node* root;
     void insertInBinaryTree(int value)
     {
         if(root==NULL)
@@ -150,10 +151,34 @@ public:
             }
         }
     }
-    bool structurallyIdentically(Tree obj)
-    {
 
+    bool structurallyIdentically(Tree &obj)
+    {
+        if(root== NULL && obj.root==NULL)
+            return true;
+        if(root==NULL || obj.root==NULL)
+            return false;
+        bool one=(root->data == obj.root->data);
+
+        root=root->left;
+        obj.root=obj.root->left;
+        bool two=structurallyIdentically(obj);
+
+        root=root->right;
+        obj.root=obj.root->right;
+        bool three=structurallyIdentically(obj);
+        return (one && two && three);
     }
+
+    bool structurallyIdentically(node* root1,node* root2)
+    {
+        if(root1== NULL && root2==NULL)
+            return true;
+        if(root1==NULL || root2==NULL)
+            return false;
+        return((root1->data==root2->data)&& structurallyIdentically(root1->left,root2->left) && structurallyIdentically(root1->right,root2->right));
+    }
+
     Tree()
     {
         root=NULL;
@@ -162,8 +187,15 @@ public:
 
 int main()
 {
-    Tree tree;
+    Tree tree,tree2;
     int choice=0,value=0;
+
+    tree2.insertInBinaryTree(10);
+    tree2.insertInBinaryTree(20);
+    tree2.insertInBinaryTree(30);
+    tree2.insertInBinaryTree(40);
+    tree2.insertInBinaryTree(50);
+    tree2.printTree();
     while(true)
     {
         cout<<"1.) Enter an Element\n";
@@ -171,6 +203,7 @@ int main()
         cout<<"3.) Print Tree\n";
         cout<<"4.) Exit\n";
         cout<<"5.) Delete Half Nodes\n";
+        cout<<"6.) structurallyIdentically\n";
         cin>> choice;
         switch(choice)
         {
@@ -190,6 +223,9 @@ int main()
             break;
         case 5:
             tree.deleteHalfNodes();
+            break;
+        case 6:
+            cout<<"\n"<<tree.structurallyIdentically(tree.root,tree2.root)<<"\n";
             break;
         }
     }
