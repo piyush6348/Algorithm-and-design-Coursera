@@ -1,5 +1,6 @@
 #include<queue>
 #include <iostream>
+#include <stack>
 using namespace std;
 /* you only have to complete the function given below.
 Node is defined as
@@ -152,33 +153,187 @@ public:
         }
     }
 
-    bool structurallyIdentically(Tree &obj)
+    bool structurallyIdentically(Tree obj)
     {
-        if(root== NULL && obj.root==NULL)
-            return true;
-        if(root==NULL || obj.root==NULL)
-            return false;
-        bool one=(root->data == obj.root->data);
+        bool ans=true;
+        stack<node*> stk1,stk2;
+        while(true)
+        {
+            while(root!=NULL || obj.root!=NULL)
+            {
+                if(root!=NULL)
+                    stk1.push(root);
+                else
+                    stk1.push(NULL);
 
-        root=root->left;
-        obj.root=obj.root->left;
-        bool two=structurallyIdentically(obj);
+                if(obj.root!=NULL)
+                    stk2.push(obj.root);
+                else
+                    stk2.push(NULL);
 
-        root=root->right;
-        obj.root=obj.root->right;
-        bool three=structurallyIdentically(obj);
-        return (one && two && three);
+                if(root!=NULL)
+                    root=root->left;
+                if(obj.root!=NULL)
+                    obj.root=obj.root->left;
+            }
+            if(stk1.empty() || stk2.empty())
+                break;
+            root=stk1.top();
+            stk1.pop();
+
+            obj.root=stk2.top();
+            stk2.pop();
+
+            if(root== NULL && obj.root==NULL)
+                ans=ans && true;
+            else if((root!=NULL && obj.root==NULL) || (root==NULL && obj.root!=NULL))
+                ans=ans && false;
+            else if(root->data == obj.root->data)
+                ans=ans && true;
+            else if(root->data != obj.root->data)
+                ans=ans && false;
+            if(root!=NULL)
+                root=root->right;
+            if(obj.root!=NULL)
+                obj.root=obj.root->right;
+        }
+        return ans;
     }
 
-    bool structurallyIdentically(node* root1,node* root2)
+    void convertMirror()
     {
-        if(root1== NULL && root2==NULL)
-            return true;
-        if(root1==NULL || root2==NULL)
-            return false;
-        return((root1->data==root2->data)&& structurallyIdentically(root1->left,root2->left) && structurallyIdentically(root1->right,root2->right));
-    }
+        node* xx=root;
+        stack<node*> stk;
+        node* previous=NULL;
+        do
+        {
+            while(root!=NULL)
+            {
+                stk.push(root);
+                root=root->left;
+            }
+            while(root==NULL && !stk.empty())
+            {
+                root=stk.top();
+                if(root->right==NULL || root->right==previous)
+                {
+                    /*
+                    if((root->left==NULL && root->right!=NULL))
+                        cout<<root->right->data<<"\n";
+                    if ((root->left!=NULL && root->right==NULL))
+                        cout<<root->left->data<<"\n";*/
+                    stk.pop();
+                    previous=root;
 
+                    node* temp=root->left;
+                    root->left=root->right;
+                    root->right=temp;
+                    root=NULL;
+                }
+                else
+                    root=root->right;
+            }
+        }
+        while(!stk.empty());
+        root=xx;
+    }
+    void printAllNodesWithoutSiblings()
+    {
+        node* xx=root;
+        stack<node*> stk;
+        node* previous=NULL;
+        do
+        {
+            while(root!=NULL)
+            {
+                stk.push(root);
+                root=root->left;
+            }
+            while(root==NULL && !stk.empty())
+            {
+                root=stk.top();
+                if(root->right==NULL || root->right==previous)
+                {
+
+                    if((root->left==NULL && root->right!=NULL))
+                        cout<<root->right->data<<"\n";
+                    if ((root->left!=NULL && root->right==NULL))
+                        cout<<root->left->data<<"\n";
+                    stk.pop();
+                    previous=root;
+                    root=NULL;
+                }
+                else
+                    root=root->right;
+            }
+        }
+        while(!stk.empty());
+        root=xx;
+    }
+    bool checkIfAllLeafNodesAreAtSameLevel()
+    {
+        if(root==NULL)
+            return false;
+        queue<node*> Queue;
+        Queue.push(root);
+        Queue.push(NULL);
+        int maximumLeafNodes=0,totalLeafNodes=0,ct=0;
+        while(!Queue.empty())
+        {
+            node* temp=Queue.front();
+            Queue.pop();
+
+            if(temp==NULL)
+            {
+                if(!Queue.empty())
+                {
+                    Queue.push(NULL);
+                }
+                if(ct>maximumLeafNodes)
+                        maximumLeafNodes=ct;
+                    ct=0;
+            }
+            else
+            {
+                if(temp->left!=NULL)
+                    Queue.push(temp->left);
+                if(temp->right!=NULL)
+                    Queue.push(temp->right);
+
+                if(temp->left==NULL && temp->right==NULL)
+                {
+                    totalLeafNodes+=1;
+                    ct+=1;
+                }
+            }
+        }
+
+        if(maximumLeafNodes==totalLeafNodes)
+            return true;
+        else
+            return false;
+    }
+    void maxRootToLeafPath(node *temp,int currentSum,int &maximumSum,vector<int> vec,vector<int> &ans)
+    {
+        if(temp==NULL)
+        {
+            if(currentSum>maximumSum)
+            {
+                ans.clear();
+                for(int i=0;i<vec.size();i++)
+                    ans.push_back(vec[i]);
+                maximumSum=currentSum;
+            }
+            return;
+        }
+        /*
+        for(int i=0;i<vec.size();i++)
+                    cout<<vec[i]<<" ";
+                    cout<<"\n";*/
+        vec.push_back(temp->data);
+        maxRootToLeafPath(temp->left,currentSum+temp->data,maximumSum,vec,ans);
+        maxRootToLeafPath(temp->right,currentSum+temp->data,maximumSum,vec,ans);
+    }
     Tree()
     {
         root=NULL;
@@ -204,6 +359,10 @@ int main()
         cout<<"4.) Exit\n";
         cout<<"5.) Delete Half Nodes\n";
         cout<<"6.) structurallyIdentically\n";
+        cout<<"7.) Convert Mirror\n";
+        cout<<"8.) All Nodes without Siblings (root neglected)\n";
+        cout<<"9.) checkIfAllLeafNodesAreAtSameLevel\n";
+        cout<<"10.) maxRootToLeafPath\n";
         cin>> choice;
         switch(choice)
         {
@@ -225,7 +384,24 @@ int main()
             tree.deleteHalfNodes();
             break;
         case 6:
-            cout<<"\n"<<tree.structurallyIdentically(tree.root,tree2.root)<<"\n";
+            cout<<"\n"<<tree.structurallyIdentically(tree2)<<"\n";
+            break;
+        case 7:
+            tree.convertMirror();
+            //tree.printTree();
+            break;
+        case 8:
+            tree.printAllNodesWithoutSiblings();
+            break;
+        case 9:
+            cout<<tree.checkIfAllLeafNodesAreAtSameLevel()<<"\n";
+            break;
+        case 10:
+            vector<int> vec,ans;
+            int maximumSum=0;
+            tree.maxRootToLeafPath(tree.root,0,maximumSum,vec,ans);
+            for(int i=0;i<ans.size();i++)
+                cout<<ans[i]<<" ";
             break;
         }
     }
