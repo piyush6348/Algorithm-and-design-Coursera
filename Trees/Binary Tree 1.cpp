@@ -217,11 +217,6 @@ public:
                 root=stk.top();
                 if(root->right==NULL || root->right==previous)
                 {
-                    /*
-                    if((root->left==NULL && root->right!=NULL))
-                        cout<<root->right->data<<"\n";
-                    if ((root->left!=NULL && root->right==NULL))
-                        cout<<root->left->data<<"\n";*/
                     stk.pop();
                     previous=root;
 
@@ -290,8 +285,8 @@ public:
                     Queue.push(NULL);
                 }
                 if(ct>maximumLeafNodes)
-                        maximumLeafNodes=ct;
-                    ct=0;
+                    maximumLeafNodes=ct;
+                ct=0;
             }
             else
             {
@@ -320,19 +315,68 @@ public:
             if(currentSum>maximumSum)
             {
                 ans.clear();
-                for(int i=0;i<vec.size();i++)
+                for(int i=0; i<vec.size(); i++)
                     ans.push_back(vec[i]);
                 maximumSum=currentSum;
             }
             return;
         }
-        /*
-        for(int i=0;i<vec.size();i++)
-                    cout<<vec[i]<<" ";
-                    cout<<"\n";*/
         vec.push_back(temp->data);
         maxRootToLeafPath(temp->left,currentSum+temp->data,maximumSum,vec,ans);
         maxRootToLeafPath(temp->right,currentSum+temp->data,maximumSum,vec,ans);
+    }
+    bool isThereAPathSum(node *temp,int currentSum,int requiredSum,vector<int> vec)
+    {
+        if(temp==NULL || currentSum==requiredSum)
+        {
+            if(currentSum==requiredSum)
+            {
+                for(int i=0; i<vec.size(); i++)
+                    cout<<vec[i]<<" ";
+                cout<<"\n";
+                return true;
+            }
+            return false;
+        }
+        vec.push_back(temp->data);
+        return (isThereAPathSum(temp->left,currentSum+temp->data,requiredSum,vec) ||
+                isThereAPathSum(temp->right,currentSum+temp->data,requiredSum,vec));
+    }
+
+    bool checkIfTwoNodesWithSum(int sum)
+    {
+        node *temp=root;
+        queue<node*> Queue1;
+
+        Queue1.push(root);
+        while(!Queue1.empty())
+        {
+            node* first=Queue1.front();
+            Queue1.pop();
+
+            if(first->left!=NULL)
+                Queue1.push(first->left);
+            if(first->right!=NULL)
+                Queue1.push(first->right);
+
+            int elementToBeSearched=sum-first->data;
+            queue<node*> Queue2;
+            Queue2.push(root);
+            while(!Queue2.empty())
+            {
+                node* second=Queue2.front();
+                Queue2.pop();
+
+                if(second->left!=NULL)
+                    Queue2.push(second->left);
+                if(second->right!=NULL)
+                    Queue2.push(second->right);
+
+                if(second->data == elementToBeSearched && first!=second)
+                    return true;
+            }
+        }
+        return false;
     }
     Tree()
     {
@@ -342,6 +386,8 @@ public:
 
 int main()
 {
+    vector<int> vec,ans;
+    int maximumSum=0;
     Tree tree,tree2;
     int choice=0,value=0;
 
@@ -363,6 +409,8 @@ int main()
         cout<<"8.) All Nodes without Siblings (root neglected)\n";
         cout<<"9.) checkIfAllLeafNodesAreAtSameLevel\n";
         cout<<"10.) maxRootToLeafPath\n";
+        cout<<"11.) isThereAPathSum\n";
+        cout<<"12.) checkIfTwoNodesWithSum\n";
         cin>> choice;
         switch(choice)
         {
@@ -397,11 +445,15 @@ int main()
             cout<<tree.checkIfAllLeafNodesAreAtSameLevel()<<"\n";
             break;
         case 10:
-            vector<int> vec,ans;
-            int maximumSum=0;
             tree.maxRootToLeafPath(tree.root,0,maximumSum,vec,ans);
-            for(int i=0;i<ans.size();i++)
+            for(int i=0; i<ans.size(); i++)
                 cout<<ans[i]<<" ";
+            break;
+        case 11:
+            cout<<tree.isThereAPathSum(tree.root,0,300,vec)<<"\n";
+            break;
+        case 12:
+            cout<<tree.checkIfTwoNodesWithSum(20)<<"\n";
             break;
         }
     }
