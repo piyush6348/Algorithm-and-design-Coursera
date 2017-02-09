@@ -378,6 +378,38 @@ public:
         }
         return false;
     }
+    int depthOfTree(node *temp)
+    {
+        if(temp==NULL)
+            return (0);
+        return (1+ max(depthOfTree(temp->right),depthOfTree(temp->left)));
+    }
+    bool isBalanced()
+    {
+        queue<node*> Queue;
+        Queue.push(root);
+        while(!Queue.empty())
+        {
+            node * tem=Queue.front();
+            Queue.pop();
+
+            if(tem->left!=NULL)
+                Queue.push(tem->left);
+            if(tem->right!=NULL)
+                Queue.push(tem->right);
+
+            int leftHeight=depthOfTree(tem->left);
+            int rightHeight=depthOfTree(tem->right);
+
+            cout<<tem->data<<" "<<leftHeight<<"  "<<rightHeight<<"\n";
+
+            if(rightHeight-leftHeight==1 || leftHeight-rightHeight==1 || leftHeight==rightHeight){}
+            else
+             return false;
+
+        }
+        return true;
+    }
     Tree()
     {
         root=NULL;
@@ -386,6 +418,7 @@ public:
 
 int main()
 {
+    cout<<"Output 1 means true and 0 means false\n\n\n";
     vector<int> vec,ans;
     int maximumSum=0;
     Tree tree,tree2;
@@ -411,6 +444,7 @@ int main()
         cout<<"10.) maxRootToLeafPath\n";
         cout<<"11.) isThereAPathSum\n";
         cout<<"12.) checkIfTwoNodesWithSum\n";
+        cout<<"13.) Is balanced(depth of the left and right subtrees of every node differ by 1 or less\n";
         cin>> choice;
         switch(choice)
         {
@@ -454,6 +488,9 @@ int main()
             break;
         case 12:
             cout<<tree.checkIfTwoNodesWithSum(20)<<"\n";
+            break;
+        case 13:
+            cout<<tree.isBalanced()<<"\n";
             break;
         }
     }
