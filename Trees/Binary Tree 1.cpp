@@ -13,7 +13,7 @@ struct node
 };
 class Tree
 {
-    //node* root;
+
 public:
     node* root;
     void insertInBinaryTree(int value)
