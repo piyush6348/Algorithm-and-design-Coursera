@@ -7,3 +7,13 @@
 2. Phone Keypad possible Strings.
 
 >Using the phone keypad return all possible words that can be produced given input digits. e.g. 23 > “ad, ae, af, bd, be, bf, cd, ce, cf”
+
+
+3. Rules for strings
+
+
+>Suppose you have a string made up of only the letters 'a' and 'b'. Write a recursive function that checks if the string was generated using the<br>
+following rules:
+* The string begins with an 'a'
+* Each 'a' is followed by nothing or an 'a' or "bb"
+* Each "bb" is followed by nothing or an 'a'
