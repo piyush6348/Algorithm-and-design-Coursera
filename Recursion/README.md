@@ -17,3 +17,7 @@ following rules:
 * The string begins with an 'a'
 * Each 'a' is followed by nothing or an 'a' or "bb"
 * Each "bb" is followed by nothing or an 'a'
+
+4. Subset Sum Problem
+
+>Given an array and a number N, find all subsets which sum up to N. (pairs,triplets, etc.)
