@@ -21,3 +21,7 @@ following rules:
 4. Subset Sum Problem
 
 >Given an array and a number N, find all subsets which sum up to N. (pairs,triplets, etc.)
+
+5. Strings based on number
+
+>Lets assume A is 1, B is 2…and Z is 26. Given a number N, print all possible strings based on above. E.g: 123 -> ABC, LC, AW
