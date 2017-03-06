@@ -7,3 +7,7 @@
 2. Stack as a Linked List .
 
 >Implement Stack using Linked List
+
+3. Stack as an array .
+
+>Implement Stack using Arrays.
