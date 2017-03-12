@@ -89,6 +89,13 @@ public:
         for(int i=0;i<priorityQueue.size();i++)
             cout<<priorityQueue[i]<<" ";
     }
+    MaxPQ(){}
+    MaxPQ(vector<int> vec)
+    {
+        priorityQueue=vec;
+        for(int i=priorityQueue.size()/2-1;i>=0;i--)
+            heapify(i);
+    }
 };
 int main()
 {
@@ -119,4 +126,15 @@ int main()
     int topValue=priorityQueueObj.top();
     if(topValue!=INT_MIN)
         cout<<topValue<<"\n";
+    vector<int> vec;
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    vec.push_back(5);
+    vec.push_back(6);
+    vec.push_back(7);
+    vec.push_back(8);
+    MaxPQ obj2(vec);
+    obj2.print();
 }
