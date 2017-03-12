@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <limits.h>
+#include <algorithm>
 using namespace std;
 
 class MaxPQ{
@@ -62,87 +63,49 @@ public:
         else
             return;
     }
-    void push(int value)
-    {
-        priorityQueue.push_back(value);
-        if(priorityQueue.size()==1)
-            return;
-        valueUpdatedOrAdded(priorityQueue.size()-1);
-    }
-    int pop()
-    {
-        swapIndexValues(0,priorityQueue.size()-1);
-        priorityQueue.pop_back();
-        heapify(0);
-    }
-    int top()
-    {
-        if(priorityQueue.size()==0)
-        {
-            cout<<"Please add elements to max priority queue\n";
-            return INT_MIN;
-        }
-        return priorityQueue[0];
-    }
     void print()
     {
         for(int i=0;i<priorityQueue.size();i++)
             cout<<priorityQueue[i]<<" ";
     }
-    void incrementPriority(int index,int valueToBeAdded)
+
+    void buildMaxHeap()
     {
-        priorityQueue[index]+=valueToBeAdded;
-        valueUpdatedOrAdded(index);
-    }
-    MaxPQ(){}
-    MaxPQ(vector<int> vec)
-    {
-        priorityQueue=vec;
         for(int i=priorityQueue.size()/2-1;i>=0;i--)
             heapify(i);
     }
+    void heapSort(vector<int> vec)
+    {
+        vector<int> sortedHeap;
+        priorityQueue=vec;
+        buildMaxHeap();
+        print();
+        cout<<"\n";
+        while(!priorityQueue.size()==0)
+        {
+            int maximum=priorityQueue[0];
+            swapIndexValues(0,priorityQueue.size()-1);
+            priorityQueue.pop_back();
+            heapify(0);
+            sortedHeap.push_back(maximum);
+        }
+        reverse(sortedHeap.begin(),sortedHeap.end());
+        priorityQueue=sortedHeap;
+        print();
+    }
+    MaxPQ(){}
 };
 int main()
 {
     MaxPQ priorityQueueObj;
-    priorityQueueObj.push(10);
-    priorityQueueObj.push(20);
-    priorityQueueObj.push(30);
-    priorityQueueObj.push(15);
-    priorityQueueObj.push(45);
-    priorityQueueObj.push(115);
-    priorityQueueObj.push(105);
-    priorityQueueObj.push(150);
-    priorityQueueObj.print();
-
-    cout<<"\n";
-    priorityQueueObj.pop();
-    priorityQueueObj.print();
-    cout<<"\n";
-    priorityQueueObj.pop();
-    priorityQueueObj.print();
-    cout<<"\n";
-    priorityQueueObj.pop();
-    priorityQueueObj.print();
-    cout<<"\n";
-    priorityQueueObj.pop();
-    priorityQueueObj.print();
-
-    int topValue=priorityQueueObj.top();
-    if(topValue!=INT_MIN)
-        cout<<topValue<<"\n";
     vector<int> vec;
     vec.push_back(10);
-    vec.push_back(20);
-    vec.push_back(30);
+    vec.push_back(9);
+    vec.push_back(8);
+    vec.push_back(7);
+    vec.push_back(6);
+    vec.push_back(5);
+    vec.push_back(4);
     vec.push_back(40);
-    vec.push_back(50);
-    vec.push_back(60);
-    vec.push_back(70);
-    //vec.push_back(80);
-    MaxPQ obj2(vec);
-    obj2.print();
-    cout<<"\n";
-    obj2.incrementPriority(3,100);
-    obj2.print();
+    priorityQueueObj.heapSort(vec);
 }
