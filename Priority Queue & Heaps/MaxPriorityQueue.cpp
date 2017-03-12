@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <limits.h>
 using namespace std;
 
 class MaxPQ{
@@ -72,9 +73,16 @@ public:
     {
         swapIndexValues(0,priorityQueue.size()-1);
         priorityQueue.pop_back();
-        //print();
-        //cout<<"\n";
         heapify(0);
+    }
+    int top()
+    {
+        if(priorityQueue.size()==0)
+        {
+            cout<<"Please add elements to max priority queue\n";
+            return INT_MIN;
+        }
+        return priorityQueue[0];
     }
     void print()
     {
@@ -107,4 +115,8 @@ int main()
     cout<<"\n";
     priorityQueueObj.pop();
     priorityQueueObj.print();
+
+    int topValue=priorityQueueObj.top();
+    if(topValue!=INT_MIN)
+        cout<<topValue<<"\n";
 }
